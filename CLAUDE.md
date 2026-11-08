@@ -11,8 +11,8 @@
 
 ```bash
 python scripts/board.py list                     # все задачи и статусы
-python scripts/board.py status <issue> "In Progress"
-python scripts/board.py status <issue> Done
+python scripts/board.py status 5 "In Progress"    # 5 = номер issue
+python scripts/board.py status 5 Done
 python scripts/board.py options                  # какие статусы есть сейчас
 ```
 

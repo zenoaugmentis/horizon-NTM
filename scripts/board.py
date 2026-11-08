@@ -121,7 +121,17 @@ def cmd_options() -> None:
     print("\n".join(options))
 
 
+def utf8_console() -> None:
+    # Windows consoles default to cp866/cp1251/cp437 and cannot print every title.
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
+
+
 def main() -> None:
+    utf8_console()
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = p.add_subparsers(dest="cmd", required=True)
     s = sub.add_parser("status", help="set Status of an issue")
