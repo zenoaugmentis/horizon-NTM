@@ -26,3 +26,7 @@ rustc-ice-*.txt
 # Local reference game files (docs/specs/versions.md); never committed
 /.local/
 *.jar
+
+# Python bytecode
+__pycache__/
+*.py[cod]
