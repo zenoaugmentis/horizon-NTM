@@ -1,0 +1,1754 @@
+{
+  "schema_version": 1,
+  "repo": "zenoaugmentis/horizon-NTM",
+  "status": "PROPOSED - not created on GitHub",
+  "source": "Horizon AGENTS.md + docs/architecture.md reviewed 2026-11-08; target tree not independently verified",
+  "milestones": {
+    "M0": {
+      "title": "M0 · Базовая инфраструктура",
+      "description": "Воспроизводимая сборка, история upstream, CI и правила совместной разработки"
+    },
+    "M1": {
+      "title": "M1 · Спецификации Minecraft 1.7.10",
+      "description": "Фикстуры, интерфейсы данных и критерии ванильной совместимости"
+    },
+    "M2": {
+      "title": "M2 · Legacy world core",
+      "description": "Блоки, чанки, NBT, сохранение, тики и генерация"
+    },
+    "M3": {
+      "title": "M3 · Ресурсы и графика",
+      "description": "Загрузка ассетов 1.7.10 и рендер старых блоков, UI"
+    },
+    "M4": {
+      "title": "M4 · Локальная играбельная 1.7.10",
+      "description": "Игровая механика, предметы, мобы и локальные тесты"
+    },
+    "M5": {
+      "title": "M5 · Сеть и сервер 1.7.10",
+      "description": "Подключение к серверу протокола 5 и headless-сервер"
+    },
+    "M6": {
+      "title": "M6 · Native Mod API",
+      "description": "Расширяемые блоки, TileEntity, транспорт и модовые пакеты"
+    },
+    "M7": {
+      "title": "M7 · HBM’s NTM: вертикальный срез",
+      "description": "Минимальная работающая производственная цепочка NTM"
+    },
+    "M8": {
+      "title": "M8 · MCHeli: прототип",
+      "description": "Одна работающая управляемая машина с корректной сетевой моделью"
+    },
+    "M9": {
+      "title": "M9 · OpenComputers: прототип",
+      "description": "Один программируемый компьютер и базовая периферия"
+    }
+  },
+  "tasks": [
+    {
+      "id": "A01",
+      "title": "Проверить состав horizon-NTM и стратегию импорта upstream",
+      "milestone": "M0",
+      "area": "infra",
+      "kind": "research",
+      "priority": "P0",
+      "size": "S",
+      "depends_on": [],
+      "paths": [
+        "README.md",
+        "Cargo.toml",
+        ".git/"
+      ],
+      "acceptance": "В PR есть точное дерево целевого репозитория, решение fork/subtree/copy и перечень сохранённых авторских уведомлений.",
+      "notes": ""
+    },
+    {
+      "id": "A02",
+      "title": "Зафиксировать upstream SHA и создать воспроизводимую базовую ветку",
+      "milestone": "M0",
+      "area": "infra",
+      "kind": "implementation",
+      "priority": "P0",
+      "size": "S",
+      "depends_on": [
+        "A01"
+      ],
+      "paths": [
+        "docs/UPSTREAM.md",
+        "Cargo.lock"
+      ],
+      "acceptance": "Документированы исходный SHA, версия Rust и команда checkout; код соответствует закреплённому коммиту.",
+      "notes": ""
+    },
+    {
+      "id": "A03",
+      "title": "Проверить локальную сборку исходного Horizon",
+      "milestone": "M0",
+      "area": "infra",
+      "kind": "integration",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "A02"
+      ],
+      "paths": [
+        "Cargo.toml",
+        "crates/",
+        "docs/BUILD.md"
+      ],
+      "acceptance": "Есть протокол ОС/компилятора, команды cargo check/test и список реально воспроизводимых проблем; лог не содержит секретов.",
+      "notes": ""
+    },
+    {
+      "id": "A04",
+      "title": "Настроить базовый CI для Rust, Python и форматирования",
+      "milestone": "M0",
+      "area": "infra",
+      "kind": "implementation",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "A02"
+      ],
+      "paths": [
+        ".github/workflows/",
+        "tools/"
+      ],
+      "acceptance": "PR автоматически проверяет fmt, ограниченный cargo check/test и тесты инструментов; не скачивает/не публикует Minecraft JAR.",
+      "notes": ""
+    },
+    {
+      "id": "A05",
+      "title": "Ввести GitHub Projects, Issues, labels и защиту основной ветки",
+      "milestone": "M0",
+      "area": "infra",
+      "kind": "implementation",
+      "priority": "P0",
+      "size": "S",
+      "depends_on": [
+        "A01"
+      ],
+      "paths": [
+        ".github/",
+        "docs/TEAM_ROADMAP.md"
+      ],
+      "acceptance": "Настроены доска, review перед merge и обязательный CI; статусы и владельцы задач определены.",
+      "notes": ""
+    },
+    {
+      "id": "A06",
+      "title": "Зафиксировать лицензионную политику, атрибуцию и границы ассетов",
+      "milestone": "M0",
+      "area": "infra",
+      "kind": "research",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [],
+      "paths": [
+        "LICENSE",
+        "THIRD_PARTY_NOTICES.md",
+        "docs/LEGAL.md"
+      ],
+      "acceptance": "Отдельно перечислены лицензии upstream и каждого мода, политика коммитов и запрещённые к публикации game assets.",
+      "notes": ""
+    },
+    {
+      "id": "A07",
+      "title": "Описать developer setup Windows/Linux и изолированные каталоги запуска",
+      "milestone": "M0",
+      "area": "infra",
+      "kind": "implementation",
+      "priority": "P1",
+      "size": "S",
+      "depends_on": [
+        "A03"
+      ],
+      "paths": [
+        "docs/BUILD.md",
+        ".gitignore"
+      ],
+      "acceptance": "Новый участник способен воспроизвести сборку; сохранения и рабочие ресурсы не попадают в git.",
+      "notes": ""
+    },
+    {
+      "id": "A08",
+      "title": "Сохранить регрессионный smoke-test 26.3 до изменений",
+      "milestone": "M0",
+      "area": "infra",
+      "kind": "integration",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "A03"
+      ],
+      "paths": [
+        "tools/",
+        "docs/BASELINE.md"
+      ],
+      "acceptance": "Описан минимум: запуск, тестовый мир, блок, сохранение, рендер; приложены измеримые результаты baseline.",
+      "notes": ""
+    },
+    {
+      "id": "A09",
+      "title": "Определить правила PR, ownership областей и ревью",
+      "milestone": "M0",
+      "area": "infra",
+      "kind": "contract",
+      "priority": "P0",
+      "size": "S",
+      "depends_on": [
+        "A01"
+      ],
+      "paths": [
+        ".github/PULL_REQUEST_TEMPLATE.md",
+        "docs/TEAM_ROADMAP.md"
+      ],
+      "acceptance": "Для каждого PR есть ссылка на Issue, тесты, владелец затронутого интерфейса и политика совместных изменений.",
+      "notes": ""
+    },
+    {
+      "id": "S01",
+      "title": "Зафиксировать ванильный эталон и версии 1.7.10 (client/server/Forge)",
+      "milestone": "M1",
+      "area": "reference",
+      "kind": "research",
+      "priority": "P0",
+      "size": "S",
+      "depends_on": [],
+      "paths": [
+        "docs/specs/versions.md"
+      ],
+      "acceptance": "Определены SHA/источники, legal setup чистого 1.7.10, отдельная тестовая сборка Forge; не публикуются чужие бинарники.",
+      "notes": ""
+    },
+    {
+      "id": "S02",
+      "title": "Спроектировать LegacyBlockId/metadata и динамические modded registries",
+      "milestone": "M1",
+      "area": "reference",
+      "kind": "contract",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "S01"
+      ],
+      "paths": [
+        "docs/contracts/blocks.md",
+        "crates/horizon-core/",
+        "crates/horizon-items/"
+      ],
+      "acceptance": "Согласована модель id/meta, модовых имен, unknown ID и граница с внутренним state/palette; есть примеры преобразований.",
+      "notes": ""
+    },
+    {
+      "id": "S03",
+      "title": "Специфицировать чанки 1.7.10 и структуру секций",
+      "milestone": "M1",
+      "area": "reference",
+      "kind": "contract",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "S01"
+      ],
+      "paths": [
+        "docs/specs/chunks-1.7.10.md",
+        "crates/horizon-world/"
+      ],
+      "acceptance": "Описаны высота, секции, свет, biomes, NBT поля и fixture для round-trip.",
+      "notes": ""
+    },
+    {
+      "id": "S04",
+      "title": "Специфицировать протокол 1.7.10 (protocol 5)",
+      "milestone": "M1",
+      "area": "reference",
+      "kind": "contract",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "S01"
+      ],
+      "paths": [
+        "docs/specs/protocol-5.md",
+        "crates/horizon-protocol/"
+      ],
+      "acceptance": "Разделены handshake/status/login/play; для каждого первого пакета известны ID, payload, переходы состояний.",
+      "notes": ""
+    },
+    {
+      "id": "S05",
+      "title": "Специфицировать загрузку ассетов, модели и pack_format=1",
+      "milestone": "M1",
+      "area": "reference",
+      "kind": "contract",
+      "priority": "P0",
+      "size": "S",
+      "depends_on": [
+        "S01"
+      ],
+      "paths": [
+        "docs/specs/assets-1.7.10.md",
+        "crates/horizon-assets/"
+      ],
+      "acceptance": "Описаны имена текстур, старый item/block atlas, модели, fallback и проверочный ресурс-пак без чужих ассетов.",
+      "notes": ""
+    },
+    {
+      "id": "S06",
+      "title": "Подготовить эталонные чанки и миры 1.7.10 для локальных тестов",
+      "milestone": "M1",
+      "area": "reference",
+      "kind": "research",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "S01",
+        "S03"
+      ],
+      "paths": [
+        "tests/fixtures/",
+        "tools/"
+      ],
+      "acceptance": "Есть скрипт получения эталонных хешей/метаданных пользователем локально; публично хранятся только законные тестовые данные.",
+      "notes": ""
+    },
+    {
+      "id": "S07",
+      "title": "Подготовить эталонные сетевые сценарии 1.7.10",
+      "milestone": "M1",
+      "area": "reference",
+      "kind": "research",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "S01",
+        "S04"
+      ],
+      "paths": [
+        "tests/protocol/",
+        "tools/"
+      ],
+      "acceptance": "Зафиксированы handshake/login/status/позиция/чанки с проверками полей; приватные токены и бинарные дампы не публикуются.",
+      "notes": ""
+    },
+    {
+      "id": "S08",
+      "title": "Специфицировать ItemStack, инвентари и legacy NBT",
+      "milestone": "M1",
+      "area": "reference",
+      "kind": "contract",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "S01",
+        "S02"
+      ],
+      "paths": [
+        "docs/contracts/items.md",
+        "crates/horizon-items/"
+      ],
+      "acceptance": "Определены item ID, damage/meta, stack size, NBT и операции split/merge; есть межмодульные примеры.",
+      "notes": ""
+    },
+    {
+      "id": "S09",
+      "title": "Зафиксировать эталонные физику, тик-правила и gameplay отличия",
+      "milestone": "M1",
+      "area": "reference",
+      "kind": "research",
+      "priority": "P1",
+      "size": "M",
+      "depends_on": [
+        "S01"
+      ],
+      "paths": [
+        "docs/specs/gameplay-1.7.10.md",
+        "tools/"
+      ],
+      "acceptance": "Есть таблица наблюдений ванили 1.7.10 для движения, тиков, урона и redstone с воспроизводимыми тестами.",
+      "notes": ""
+    },
+    {
+      "id": "S10",
+      "title": "Спроектировать совместимый Mod API и политику Java/Forge модов",
+      "milestone": "M1",
+      "area": "reference",
+      "kind": "contract",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "S02",
+        "S08"
+      ],
+      "paths": [
+        "docs/contracts/mod-api.md",
+        "crates/horizon-mods/"
+      ],
+      "acceptance": "Документ явно различает native-порт и выполнение Forge JAR; зафиксированы lifecycle, register, tick, save, packets.",
+      "notes": ""
+    },
+    {
+      "id": "S11",
+      "title": "Определить matrix parity и критерии завершения версии 1.7.10",
+      "milestone": "M1",
+      "area": "reference",
+      "kind": "contract",
+      "priority": "P0",
+      "size": "S",
+      "depends_on": [
+        "S01",
+        "S09"
+      ],
+      "paths": [
+        "docs/PARITY_MATRIX.md",
+        "tools/"
+      ],
+      "acceptance": "Для каждого milestone есть публичный набор тестов и обязательные критерии; неподтверждённые механики помечены UNKNOWN.",
+      "notes": ""
+    },
+    {
+      "id": "W01",
+      "title": "Внедрить типы legacy block/item ID и metadata без потери modded ID",
+      "milestone": "M2",
+      "area": "world",
+      "kind": "implementation",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "S02",
+        "A04"
+      ],
+      "paths": [
+        "crates/horizon-core/",
+        "crates/horizon-items/"
+      ],
+      "acceptance": "Round-trip 1.7.10 block id/meta и неизвестного модового ID проходит модульные тесты.",
+      "notes": ""
+    },
+    {
+      "id": "W02",
+      "title": "Реализовать трансляцию legacy block-state ↔ внутреннее состояние",
+      "milestone": "M2",
+      "area": "world",
+      "kind": "implementation",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "W01"
+      ],
+      "paths": [
+        "crates/horizon-items/",
+        "crates/horizon-world/"
+      ],
+      "acceptance": "Конвертер сохраняет id/meta на тестовом наборе и явно сообщает о неотобразимых modern states.",
+      "notes": ""
+    },
+    {
+      "id": "W03",
+      "title": "Ввести параметр версии и высоты мира в World/Level API",
+      "milestone": "M2",
+      "area": "world",
+      "kind": "implementation",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "S03",
+        "A04"
+      ],
+      "paths": [
+        "crates/horizon-world/",
+        "crates/horizon-core/"
+      ],
+      "acceptance": "Высота и границы Y для 1.7.10 проходят тесты; нет жёсткого допущения современной высоты.",
+      "notes": ""
+    },
+    {
+      "id": "W04",
+      "title": "Реализовать чтение legacy Anvil/NBT чанка 1.7.10",
+      "milestone": "M2",
+      "area": "world",
+      "kind": "implementation",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "W01",
+        "W03",
+        "S06"
+      ],
+      "paths": [
+        "crates/horizon-world/src/region.rs",
+        "crates/horizon-world/src/nbt.rs"
+      ],
+      "acceptance": "Fixture 1.7.10 загружается, читаются блоки, metadata, sky/block light, biomes.",
+      "notes": ""
+    },
+    {
+      "id": "W05",
+      "title": "Реализовать запись legacy Anvil/NBT чанка 1.7.10",
+      "milestone": "M2",
+      "area": "world",
+      "kind": "implementation",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "W04"
+      ],
+      "paths": [
+        "crates/horizon-world/",
+        "crates/horizon-client/src/save.rs"
+      ],
+      "acceptance": "Загруженный чанк сохраняется и вновь загружается без потерь id/meta, света, NBT; сравнение с эталоном.",
+      "notes": ""
+    },
+    {
+      "id": "W06",
+      "title": "Добавить legacy level.dat и player NBT",
+      "milestone": "M2",
+      "area": "world",
+      "kind": "implementation",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "S03",
+        "A04"
+      ],
+      "paths": [
+        "crates/horizon-client/src/save.rs",
+        "crates/horizon-world/src/nbt.rs"
+      ],
+      "acceptance": "Мир и игрок сохраняют seed, position, inventory и основные флаги с проверкой round-trip.",
+      "notes": ""
+    },
+    {
+      "id": "W07",
+      "title": "Реализовать legacy biome IDs и адаптер биомов",
+      "milestone": "M2",
+      "area": "world",
+      "kind": "implementation",
+      "priority": "P1",
+      "size": "M",
+      "depends_on": [
+        "S03",
+        "W01"
+      ],
+      "paths": [
+        "crates/horizon-world/src/worldgen/",
+        "crates/horizon-world/"
+      ],
+      "acceptance": "Биомы 1.7.10 определяются по эталонным ID, не привязаны к modern ID.",
+      "notes": ""
+    },
+    {
+      "id": "W08",
+      "title": "Восстановить базовую генерацию рельефа 1.7.10",
+      "milestone": "M2",
+      "area": "world",
+      "kind": "implementation",
+      "priority": "P1",
+      "size": "M",
+      "depends_on": [
+        "W03",
+        "W07",
+        "S06"
+      ],
+      "paths": [
+        "crates/horizon-world/src/worldgen/"
+      ],
+      "acceptance": "Для нескольких seed проверяются контрольные высоты, биомы и распределение блоков; сравнительный отчёт.",
+      "notes": ""
+    },
+    {
+      "id": "W09",
+      "title": "Перенести генерацию пещер, руд и базовых структур",
+      "milestone": "M2",
+      "area": "world",
+      "kind": "implementation",
+      "priority": "P1",
+      "size": "M",
+      "depends_on": [
+        "W08"
+      ],
+      "paths": [
+        "crates/horizon-world/src/worldgen/"
+      ],
+      "acceptance": "Тестовые seeds показывают ожидаемые места объектов/распределения; каждый тип покрыт fixture.",
+      "notes": ""
+    },
+    {
+      "id": "W10",
+      "title": "Восстановить legacy block tick, neighbor updates, fluids",
+      "milestone": "M2",
+      "area": "world",
+      "kind": "implementation",
+      "priority": "P1",
+      "size": "M",
+      "depends_on": [
+        "W01",
+        "W03",
+        "S09"
+      ],
+      "paths": [
+        "crates/horizon-world/src/level/"
+      ],
+      "acceptance": "Блоки обновляются в корректном порядке; тесты на жидкость, гравитацию, соседей и random ticks.",
+      "notes": ""
+    },
+    {
+      "id": "W11",
+      "title": "Реализовать сохранение/обновление BlockEntity (TileEntity) в мире",
+      "milestone": "M2",
+      "area": "world",
+      "kind": "implementation",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "W05",
+        "S10"
+      ],
+      "paths": [
+        "crates/horizon-world/",
+        "crates/horizon-client/src/game/block_entity_ticks.rs"
+      ],
+      "acceptance": "TileEntity хранит тип и NBT, получает тик, сохраняется и восстановляется после перезапуска.",
+      "notes": ""
+    },
+    {
+      "id": "W12",
+      "title": "Обеспечить сохранение/перезагрузку сущностей и инвентарей",
+      "milestone": "M2",
+      "area": "world",
+      "kind": "integration",
+      "priority": "P1",
+      "size": "M",
+      "depends_on": [
+        "W05",
+        "W06",
+        "S08"
+      ],
+      "paths": [
+        "crates/horizon-client/src/game/persist.rs",
+        "crates/horizon-client/src/entity_nbt.rs"
+      ],
+      "acceptance": "Сущность и инвентарь переживают закрытие мира, повторная загрузка не дублирует сущности.",
+      "notes": ""
+    },
+    {
+      "id": "W13",
+      "title": "Создать интеграционный тест world-open → edit → save → reopen",
+      "milestone": "M2",
+      "area": "world",
+      "kind": "integration",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "W04",
+        "W05",
+        "W06",
+        "W10"
+      ],
+      "paths": [
+        "tests/",
+        "tools/"
+      ],
+      "acceptance": "Тест без графики последовательно изменяет 2 блока, сохраняет мир, повторно открывает и сравнивает состояние.",
+      "notes": ""
+    },
+    {
+      "id": "R01",
+      "title": "Подготовить ресурсы 1.7.10 из локально установленной копии",
+      "milestone": "M3",
+      "area": "render",
+      "kind": "implementation",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "S05",
+        "A04"
+      ],
+      "paths": [
+        "crates/horizon-prepare/"
+      ],
+      "acceptance": "Команда работает с законной локальной установкой 1.7.10, создаёт файлы лишь в ignored-каталоге и проверяет версию.",
+      "notes": ""
+    },
+    {
+      "id": "R02",
+      "title": "Реализовать legacy texture/model resolver для блоков",
+      "milestone": "M3",
+      "area": "render",
+      "kind": "implementation",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "S05",
+        "R01"
+      ],
+      "paths": [
+        "crates/horizon-assets/",
+        "crates/horizon-client-render/src/model_library.rs"
+      ],
+      "acceptance": "Stone/dirt/grass и 2 нестандартных state имеют правильные текстуры; fallback объясним и тестируется.",
+      "notes": ""
+    },
+    {
+      "id": "R03",
+      "title": "Реализовать atlas, UV и анимации 1.7.10",
+      "milestone": "M3",
+      "area": "render",
+      "kind": "implementation",
+      "priority": "P1",
+      "size": "M",
+      "depends_on": [
+        "R02"
+      ],
+      "paths": [
+        "crates/horizon-client-render/src/atlas_sources.rs",
+        "crates/horizon-client-render/src/sprites.rs"
+      ],
+      "acceptance": "Тесты UV и кадров текстур без сдвигов; поддержан texture animation metadata, если присутствует.",
+      "notes": ""
+    },
+    {
+      "id": "R04",
+      "title": "Согласовать преобразование legacy state в meshing",
+      "milestone": "M3",
+      "area": "render",
+      "kind": "contract",
+      "priority": "P0",
+      "size": "S",
+      "depends_on": [
+        "W02",
+        "S05"
+      ],
+      "paths": [
+        "docs/contracts/legacy-meshing.md",
+        "crates/horizon-client-render/"
+      ],
+      "acceptance": "Есть API и тестовые примеры occlusion, transparency, water, stairs; интерфейс принят владельцами world/render.",
+      "notes": ""
+    },
+    {
+      "id": "R05",
+      "title": "Отобразить тестовый legacy-чанк новым рендер-путём",
+      "milestone": "M3",
+      "area": "render",
+      "kind": "integration",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "W04",
+        "R02",
+        "R04"
+      ],
+      "paths": [
+        "crates/horizon-client-render/src/streaming.rs",
+        "crates/horizon-client-render/src/chunk.rs"
+      ],
+      "acceptance": "На экране видно корректный чанк; нет потери блоков/ошибок UV; приложен скриншот и тест.",
+      "notes": ""
+    },
+    {
+      "id": "R06",
+      "title": "Адаптировать skylight/block light для 1.7.10",
+      "milestone": "M3",
+      "area": "render",
+      "kind": "implementation",
+      "priority": "P1",
+      "size": "M",
+      "depends_on": [
+        "W04",
+        "R05"
+      ],
+      "paths": [
+        "crates/horizon-client-render/src/light.rs",
+        "crates/horizon-world/"
+      ],
+      "acceptance": "Свет сравним с reference на дневном/ночном тестовом чанке; нет грубых артефактов на границе секций.",
+      "notes": ""
+    },
+    {
+      "id": "R07",
+      "title": "Адаптировать render item stack и GUI-инвентарь",
+      "milestone": "M3",
+      "area": "render",
+      "kind": "implementation",
+      "priority": "P1",
+      "size": "M",
+      "depends_on": [
+        "S08",
+        "R02"
+      ],
+      "paths": [
+        "crates/horizon-client-render/",
+        "crates/horizon-client/src/menu.rs"
+      ],
+      "acceptance": "Показываются предметы 1.7.10 с damage/meta; drag/drop совпадает с тестовыми сценариями.",
+      "notes": ""
+    },
+    {
+      "id": "R08",
+      "title": "Сделать экран выбора и запуска мира 1.7.10",
+      "milestone": "M3",
+      "area": "render",
+      "kind": "implementation",
+      "priority": "P1",
+      "size": "M",
+      "depends_on": [
+        "W06",
+        "R01"
+      ],
+      "paths": [
+        "crates/horizon-client/src/title.rs",
+        "crates/horizon-client/src/game/startup_menu.rs"
+      ],
+      "acceptance": "Можно создать/выбрать только тестовый мир 1.7.10, обработать ошибку неверной версии.",
+      "notes": ""
+    },
+    {
+      "id": "R09",
+      "title": "Сделать клиентский smoke-test загрузки legacy-мира",
+      "milestone": "M3",
+      "area": "render",
+      "kind": "integration",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "R05",
+        "R08",
+        "W13"
+      ],
+      "paths": [
+        "tools/",
+        "tests/"
+      ],
+      "acceptance": "Клиент открывает зафиксированный тестовый мир, отрисовывает сцены; пройден сценарий взаимодействия с блоком.",
+      "notes": ""
+    },
+    {
+      "id": "G01",
+      "title": "Адаптировать core ItemStack операции под legacy NBT и damage",
+      "milestone": "M4",
+      "area": "gameplay",
+      "kind": "implementation",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "S08",
+        "W01"
+      ],
+      "paths": [
+        "crates/horizon-items/"
+      ],
+      "acceptance": "Split/merge/equip/drop сохраняют ID/meta/NBT, включая неизвестный модовый предмет.",
+      "notes": ""
+    },
+    {
+      "id": "G02",
+      "title": "Реализовать размещение/ломание блоков, дропы и взаимодействия",
+      "milestone": "M4",
+      "area": "gameplay",
+      "kind": "implementation",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "W10",
+        "G01"
+      ],
+      "paths": [
+        "crates/horizon-client/src/game/hand.rs",
+        "crates/horizon-client/src/game/item_actions.rs"
+      ],
+      "acceptance": "Place/break корректно меняют мир, дроп и инвентарь; тест с сохранением.",
+      "notes": ""
+    },
+    {
+      "id": "G03",
+      "title": "Адаптировать движение, коллизии и gravity 1.7.10",
+      "milestone": "M4",
+      "area": "gameplay",
+      "kind": "implementation",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "W03",
+        "S09"
+      ],
+      "paths": [
+        "crates/horizon-world/src/entity_move.rs",
+        "crates/horizon-world/src/player_travel.rs"
+      ],
+      "acceptance": "Прогон сценариев walk/jump/fall/collision с допусками из эталона 1.7.10.",
+      "notes": ""
+    },
+    {
+      "id": "G04",
+      "title": "Адаптировать повреждения, броню и голод 1.7.10",
+      "milestone": "M4",
+      "area": "gameplay",
+      "kind": "implementation",
+      "priority": "P1",
+      "size": "M",
+      "depends_on": [
+        "G03",
+        "S09"
+      ],
+      "paths": [
+        "crates/horizon-client/src/game/",
+        "crates/horizon-items/"
+      ],
+      "acceptance": "Тесты измеряют урон от падения, урон через броню, питание и регенерацию.",
+      "notes": ""
+    },
+    {
+      "id": "G05",
+      "title": "Реализовать legacy crafting recipes и furnace",
+      "milestone": "M4",
+      "area": "gameplay",
+      "kind": "implementation",
+      "priority": "P1",
+      "size": "M",
+      "depends_on": [
+        "G01",
+        "S08"
+      ],
+      "paths": [
+        "crates/horizon-client/src/crafting.rs",
+        "crates/horizon-client/src/game/machines.rs"
+      ],
+      "acceptance": "2x2/3x3 рецепты и печка проходят таблицу тестов 1.7.10; некорректные рецепты не срабатывают.",
+      "notes": ""
+    },
+    {
+      "id": "G06",
+      "title": "Адаптировать инвентарь, сундук, печку и окна контейнеров",
+      "milestone": "M4",
+      "area": "gameplay",
+      "kind": "implementation",
+      "priority": "P1",
+      "size": "M",
+      "depends_on": [
+        "G01",
+        "R07"
+      ],
+      "paths": [
+        "crates/horizon-client/src/menu.rs",
+        "crates/horizon-client/src/game/inventory_slots.rs"
+      ],
+      "acceptance": "Click/shift-click/drag для 3 типов контейнера не дублируют предметы; есть регрессионные тесты.",
+      "notes": ""
+    },
+    {
+      "id": "G07",
+      "title": "Сформировать таблицу сущностей и атрибутов 1.7.10",
+      "milestone": "M4",
+      "area": "gameplay",
+      "kind": "research",
+      "priority": "P1",
+      "size": "S",
+      "depends_on": [
+        "S09"
+      ],
+      "paths": [
+        "crates/horizon-client/src/mobs/species.rs",
+        "docs/specs/entities.md"
+      ],
+      "acceptance": "Реестр 1.7.10 со списком удаляемых modern-сущностей; новые сущности не активируются по ошибке.",
+      "notes": ""
+    },
+    {
+      "id": "G08",
+      "title": "Реализовать базовый natural spawn + два тестовых mob AI",
+      "milestone": "M4",
+      "area": "gameplay",
+      "kind": "implementation",
+      "priority": "P1",
+      "size": "M",
+      "depends_on": [
+        "G03",
+        "G07",
+        "W08"
+      ],
+      "paths": [
+        "crates/horizon-client/src/mobs/",
+        "crates/horizon-client/src/game/natural_spawning.rs"
+      ],
+      "acceptance": "В эталонном мире мобы появляются и двигаются по проверяемым правилам; тесты spawn и path.",
+      "notes": ""
+    },
+    {
+      "id": "G09",
+      "title": "Адаптировать жидкость, огонь, редстоун для 1.7.10",
+      "milestone": "M4",
+      "area": "gameplay",
+      "kind": "implementation",
+      "priority": "P1",
+      "size": "M",
+      "depends_on": [
+        "W10",
+        "S09"
+      ],
+      "paths": [
+        "crates/horizon-world/src/level/"
+      ],
+      "acceptance": "Тестовая схема из двух логических цепочек повторяет ожидаемые переходы 1.7.10.",
+      "notes": ""
+    },
+    {
+      "id": "G10",
+      "title": "Адаптировать команды и gamerules к состоянию 1.7.10",
+      "milestone": "M4",
+      "area": "gameplay",
+      "kind": "implementation",
+      "priority": "P2",
+      "size": "M",
+      "depends_on": [
+        "S09"
+      ],
+      "paths": [
+        "crates/horizon-command/",
+        "crates/horizon-client/src/game/commands.rs"
+      ],
+      "acceptance": "Команды, которых не было в 1.7.10, не регистрируются; основные команды проверены примерами.",
+      "notes": ""
+    },
+    {
+      "id": "G11",
+      "title": "Локальный vertical slice: пройти 1 игровой день, сохраниться",
+      "milestone": "M4",
+      "area": "gameplay",
+      "kind": "integration",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "G02",
+        "G03",
+        "G05",
+        "G06",
+        "W13",
+        "R09"
+      ],
+      "paths": [
+        "tools/",
+        "tests/"
+      ],
+      "acceptance": "В 1.7.10 мире можно ходить, добыть блок, скрафтить предмет, сохранить и открыть заново.",
+      "notes": ""
+    },
+    {
+      "id": "N01",
+      "title": "Сделать codec handshake/status 1.7.10",
+      "milestone": "M5",
+      "area": "network",
+      "kind": "implementation",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "S04",
+        "S07"
+      ],
+      "paths": [
+        "crates/horizon-protocol/src/"
+      ],
+      "acceptance": "Unit-тесты packet ID/framing/status response и handshake по протоколу 5.",
+      "notes": ""
+    },
+    {
+      "id": "N02",
+      "title": "Сделать login/шифрование/compression policy 1.7.10",
+      "milestone": "M5",
+      "area": "network",
+      "kind": "implementation",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "N01",
+        "S07"
+      ],
+      "paths": [
+        "crates/horizon-protocol/src/connection.rs"
+      ],
+      "acceptance": "Клиент штатно проходит offline-mode login тестового локального сервера; состояния протокола корректны.",
+      "notes": ""
+    },
+    {
+      "id": "N03",
+      "title": "Декодировать основные play packets 1.7.10",
+      "milestone": "M5",
+      "area": "network",
+      "kind": "implementation",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "N02",
+        "S07"
+      ],
+      "paths": [
+        "crates/horizon-protocol/src/packets/"
+      ],
+      "acceptance": "Chunk/entity/position/time/health packets проходят fixture, пакет с неверной длиной отклоняется.",
+      "notes": ""
+    },
+    {
+      "id": "N04",
+      "title": "Кодировать player action/movement/chat packets 1.7.10",
+      "milestone": "M5",
+      "area": "network",
+      "kind": "implementation",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "N02",
+        "S07"
+      ],
+      "paths": [
+        "crates/horizon-protocol/src/packets/"
+      ],
+      "acceptance": "Пакеты движения, dig/place и chat соответствуют эталонным байтовым примерам.",
+      "notes": ""
+    },
+    {
+      "id": "N05",
+      "title": "Подключить network play к реестру и чанкам 1.7.10",
+      "milestone": "M5",
+      "area": "network",
+      "kind": "integration",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "N03",
+        "N04",
+        "W04"
+      ],
+      "paths": [
+        "crates/horizon-client/src/net.rs",
+        "crates/horizon-client/src/game/remote.rs"
+      ],
+      "acceptance": "Открывается мир на локальном vanilla 1.7.10 сервере, видна карта и позиция игрока.",
+      "notes": ""
+    },
+    {
+      "id": "N06",
+      "title": "Адаптировать выделенный сервер: handshake/login/status",
+      "milestone": "M5",
+      "area": "network",
+      "kind": "implementation",
+      "priority": "P1",
+      "size": "M",
+      "depends_on": [
+        "N01",
+        "N02"
+      ],
+      "paths": [
+        "crates/horizon-server/",
+        "crates/horizon-client/src/game/dedicated.rs"
+      ],
+      "acceptance": "Сервер отвечает vanilla 1.7.10 status и принимает offline test client; нет зависимости от modern config state.",
+      "notes": ""
+    },
+    {
+      "id": "N07",
+      "title": "Адаптировать server tick и отправку мира/сущностей",
+      "milestone": "M5",
+      "area": "network",
+      "kind": "implementation",
+      "priority": "P1",
+      "size": "M",
+      "depends_on": [
+        "N06",
+        "W13",
+        "G02"
+      ],
+      "paths": [
+        "crates/horizon-client/src/lan/",
+        "crates/horizon-client/src/game/dedicated.rs"
+      ],
+      "acceptance": "Два тестовых клиента видят одинаковые блоки после редактирования, мир сохраняется.",
+      "notes": ""
+    },
+    {
+      "id": "N08",
+      "title": "Подготовить тесты online-mode auth и повреждённых пакетов",
+      "milestone": "M5",
+      "area": "network",
+      "kind": "integration",
+      "priority": "P1",
+      "size": "M",
+      "depends_on": [
+        "N05",
+        "N07"
+      ],
+      "paths": [
+        "tests/",
+        "tools/"
+      ],
+      "acceptance": "Тестовый стенд разграничивает offline/online, проверяет отказ на повреждённые пакеты; без учётных данных в git.",
+      "notes": ""
+    },
+    {
+      "id": "N09",
+      "title": "E2E vanilla 1.7.10 client/server ↔ Horizon",
+      "milestone": "M5",
+      "area": "network",
+      "kind": "integration",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "N05",
+        "N07",
+        "N08"
+      ],
+      "paths": [
+        "tools/",
+        "tests/"
+      ],
+      "acceptance": "Зафиксирована матрица совместимости: login, movement, block updates, disconnect, save/reconnect.",
+      "notes": ""
+    },
+    {
+      "id": "X01",
+      "title": "Реализовать регистрации модовых блоков и предметов",
+      "milestone": "M6",
+      "area": "modapi",
+      "kind": "implementation",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "S10",
+        "W01",
+        "G01"
+      ],
+      "paths": [
+        "crates/horizon-mods/",
+        "crates/horizon-items/"
+      ],
+      "acceptance": "Тестовый мод регистрирует 2 блока и предмет, конфликты ID диагностируются до запуска мира.",
+      "notes": ""
+    },
+    {
+      "id": "X02",
+      "title": "Реализовать mod lifecycle и event hooks (tick/use/place/break)",
+      "milestone": "M6",
+      "area": "modapi",
+      "kind": "implementation",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "X01",
+        "W10",
+        "G02"
+      ],
+      "paths": [
+        "crates/horizon-mods/",
+        "crates/horizon-client/src/mod_content.rs"
+      ],
+      "acceptance": "Тестовый мод получает события и изменяет только свой state; порядок вызовов покрыт тестом.",
+      "notes": ""
+    },
+    {
+      "id": "X03",
+      "title": "Сделать типизированные BlockEntity/TileEntity data hooks",
+      "milestone": "M6",
+      "area": "modapi",
+      "kind": "implementation",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "X02",
+        "W11"
+      ],
+      "paths": [
+        "crates/horizon-mods/",
+        "crates/horizon-world/"
+      ],
+      "acceptance": "Модовая машина сохраняет данные и получает server tick без ручного вмешательства в game.rs.",
+      "notes": ""
+    },
+    {
+      "id": "X04",
+      "title": "Создать mod inventory/GUI/container API",
+      "milestone": "M6",
+      "area": "modapi",
+      "kind": "implementation",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "X03",
+        "G06"
+      ],
+      "paths": [
+        "crates/horizon-mods/",
+        "crates/horizon-client/src/menu.rs"
+      ],
+      "acceptance": "Тестовый контейнер со слотами хранит предметы и не дублирует их при shift-click.",
+      "notes": ""
+    },
+    {
+      "id": "X05",
+      "title": "Создать mod recipe/processing API",
+      "milestone": "M6",
+      "area": "modapi",
+      "kind": "implementation",
+      "priority": "P1",
+      "size": "M",
+      "depends_on": [
+        "X01",
+        "G05"
+      ],
+      "paths": [
+        "crates/horizon-mods/",
+        "crates/horizon-client/src/crafting.rs"
+      ],
+      "acceptance": "Тестовый рецепт/печь из модового пакета регистрируются и проверяются без hardcode в vanilla.",
+      "notes": ""
+    },
+    {
+      "id": "X06",
+      "title": "Добавить mod network channels и синхронизацию TileEntity",
+      "milestone": "M6",
+      "area": "modapi",
+      "kind": "implementation",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "X03",
+        "N09"
+      ],
+      "paths": [
+        "crates/horizon-mods/",
+        "crates/horizon-protocol/"
+      ],
+      "acceptance": "Данные одного тестового устройства приходят двум клиентам; неизвестный channel безопасно игнорируется.",
+      "notes": ""
+    },
+    {
+      "id": "X07",
+      "title": "Создать extension points для custom block/entity renderers",
+      "milestone": "M6",
+      "area": "modapi",
+      "kind": "implementation",
+      "priority": "P1",
+      "size": "M",
+      "depends_on": [
+        "X01",
+        "R05"
+      ],
+      "paths": [
+        "crates/horizon-client-render/",
+        "crates/horizon-mods/"
+      ],
+      "acceptance": "Тестовый нестандартный блок отображается без патча центрального рендера.",
+      "notes": ""
+    },
+    {
+      "id": "X08",
+      "title": "Добавить mod entity/vehicle registration + physics hooks",
+      "milestone": "M6",
+      "area": "modapi",
+      "kind": "implementation",
+      "priority": "P1",
+      "size": "M",
+      "depends_on": [
+        "X02",
+        "G03"
+      ],
+      "paths": [
+        "crates/horizon-mods/",
+        "crates/horizon-client/src/mobs/"
+      ],
+      "acceptance": "Тестовая модовая сущность создаётся, сохраняется, движется и сталкивается.",
+      "notes": ""
+    },
+    {
+      "id": "X09",
+      "title": "Поддержать mod worldgen hooks, ID namespacing и конфигурации",
+      "milestone": "M6",
+      "area": "modapi",
+      "kind": "implementation",
+      "priority": "P1",
+      "size": "M",
+      "depends_on": [
+        "X01",
+        "W08"
+      ],
+      "paths": [
+        "crates/horizon-mods/",
+        "crates/horizon-world/src/worldgen/"
+      ],
+      "acceptance": "Тестовая руда регистрируется в генераторе и одинаково появляется по seed.",
+      "notes": ""
+    },
+    {
+      "id": "X10",
+      "title": "Собрать hello-world .hnmod и тест установки/удаления",
+      "milestone": "M6",
+      "area": "modapi",
+      "kind": "integration",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "X02",
+        "X03",
+        "X04",
+        "X07"
+      ],
+      "paths": [
+        "crates/cargo-horizon-mod/",
+        "tests/",
+        "docs/"
+      ],
+      "acceptance": "Примерный мод отдельно собирается, ставится, регистрируется и удаляется с сохранением данных диагностики.",
+      "notes": ""
+    },
+    {
+      "id": "H01",
+      "title": "Проверить лицензии, версии, и каталог механик HBM’s NTM для 1.7.10",
+      "milestone": "M7",
+      "area": "ntm",
+      "kind": "research",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "A06",
+        "S10"
+      ],
+      "paths": [
+        "docs/mods/hbm/"
+      ],
+      "acceptance": "Есть зафиксированный целевой билд, таблица блоков/рецептов/машин и лицензионные ограничения.",
+      "notes": ""
+    },
+    {
+      "id": "H02",
+      "title": "Спроектировать минимальную NTM-цепочку и тестовые данные",
+      "milestone": "M7",
+      "area": "ntm",
+      "kind": "contract",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "H01",
+        "X10"
+      ],
+      "paths": [
+        "docs/mods/hbm/"
+      ],
+      "acceptance": "Согласован конкретный вертикальный срез: руда → переработка → выход; указаны входы, энергия и tick-условия.",
+      "notes": ""
+    },
+    {
+      "id": "H03",
+      "title": "Зарегистрировать первые блоки/предметы NTM",
+      "milestone": "M7",
+      "area": "ntm",
+      "kind": "implementation",
+      "priority": "P1",
+      "size": "M",
+      "depends_on": [
+        "H02",
+        "X01"
+      ],
+      "paths": [
+        "mods/",
+        "crates/horizon-mods/"
+      ],
+      "acceptance": "Первый набор блоков и предметов NTM появляется по registry и корректно сохраняется.",
+      "notes": ""
+    },
+    {
+      "id": "H04",
+      "title": "Добавить ore generation NTM для выбранного сырья",
+      "milestone": "M7",
+      "area": "ntm",
+      "kind": "implementation",
+      "priority": "P1",
+      "size": "M",
+      "depends_on": [
+        "H03",
+        "X09"
+      ],
+      "paths": [
+        "mods/"
+      ],
+      "acceptance": "Выбранная руда генерируется по конфигурации в воспроизводимом мире.",
+      "notes": ""
+    },
+    {
+      "id": "H05",
+      "title": "Реализовать одну машину NTM: state, tick, inventory",
+      "milestone": "M7",
+      "area": "ntm",
+      "kind": "implementation",
+      "priority": "P1",
+      "size": "M",
+      "depends_on": [
+        "H03",
+        "X03",
+        "X04"
+      ],
+      "paths": [
+        "mods/"
+      ],
+      "acceptance": "Машина с одним рецептом и инвентарём выполняет обработку и переживает перезагрузку мира.",
+      "notes": ""
+    },
+    {
+      "id": "H06",
+      "title": "Добавить базовую энерго-модель NTM и ввод/вывод энергии",
+      "milestone": "M7",
+      "area": "ntm",
+      "kind": "implementation",
+      "priority": "P1",
+      "size": "M",
+      "depends_on": [
+        "H05",
+        "X02"
+      ],
+      "paths": [
+        "mods/"
+      ],
+      "acceptance": "Граничные условия: отрицательный/избыточный ток не ломают state; значения синхронизируются.",
+      "notes": ""
+    },
+    {
+      "id": "H07",
+      "title": "Перенести UI/текстуры выбранной машины NTM",
+      "milestone": "M7",
+      "area": "ntm",
+      "kind": "implementation",
+      "priority": "P1",
+      "size": "M",
+      "depends_on": [
+        "H05",
+        "X07"
+      ],
+      "paths": [
+        "mods/"
+      ],
+      "acceptance": "GUI показывает слоты, ход процесса и накопленную энергию, использует разрешённые ресурсы.",
+      "notes": ""
+    },
+    {
+      "id": "H08",
+      "title": "Синхронизировать NTM машину клиент ↔ сервер",
+      "milestone": "M7",
+      "area": "ntm",
+      "kind": "integration",
+      "priority": "P1",
+      "size": "M",
+      "depends_on": [
+        "H05",
+        "H06",
+        "H07",
+        "X06"
+      ],
+      "paths": [
+        "mods/",
+        "tests/"
+      ],
+      "acceptance": "Два клиента видят один прогресс машины; сохранение не удваивает выход.",
+      "notes": ""
+    },
+    {
+      "id": "H09",
+      "title": "E2E выбранной NTM-цепочки добыча → машина → предмет",
+      "milestone": "M7",
+      "area": "ntm",
+      "kind": "integration",
+      "priority": "P0",
+      "size": "M",
+      "depends_on": [
+        "H04",
+        "H08"
+      ],
+      "paths": [
+        "tests/",
+        "docs/mods/hbm/"
+      ],
+      "acceptance": "Автоматический сценарий проходит цепочку и сравнивает выход с задокументированным эталоном.",
+      "notes": ""
+    },
+    {
+      "id": "V01",
+      "title": "Исследовать лицензию и целевой релиз MCHeli 1.7.10",
+      "milestone": "M8",
+      "area": "mcheli",
+      "kind": "research",
+      "priority": "P1",
+      "size": "S",
+      "depends_on": [
+        "A06"
+      ],
+      "paths": [
+        "docs/mods/mcheli/"
+      ],
+      "acceptance": "Есть список требований, прав на модели, типов сущностей, каналов управления и оружия.",
+      "notes": ""
+    },
+    {
+      "id": "V02",
+      "title": "Специфицировать прототип одного летательного аппарата",
+      "milestone": "M8",
+      "area": "mcheli",
+      "kind": "contract",
+      "priority": "P1",
+      "size": "S",
+      "depends_on": [
+        "V01",
+        "X08"
+      ],
+      "paths": [
+        "docs/mods/mcheli/"
+      ],
+      "acceptance": "Определены physics/tick input, network delta, модель и тестовые сценарии полёта.",
+      "notes": ""
+    },
+    {
+      "id": "V03",
+      "title": "Реализовать появление и управление тестовым аппаратом",
+      "milestone": "M8",
+      "area": "mcheli",
+      "kind": "implementation",
+      "priority": "P1",
+      "size": "M",
+      "depends_on": [
+        "V02",
+        "X08"
+      ],
+      "paths": [
+        "mods/"
+      ],
+      "acceptance": "Аппарат spawn/despawn, принимает throttle/yaw/pitch и сохраняет state.",
+      "notes": ""
+    },
+    {
+      "id": "V04",
+      "title": "Реализовать модель, посадку и камеру тестового аппарата",
+      "milestone": "M8",
+      "area": "mcheli",
+      "kind": "implementation",
+      "priority": "P1",
+      "size": "M",
+      "depends_on": [
+        "V03",
+        "X07"
+      ],
+      "paths": [
+        "mods/"
+      ],
+      "acceptance": "Отрисовка, камера, посадка/выход работают в офлайн тесте без ошибок коллизий.",
+      "notes": ""
+    },
+    {
+      "id": "V05",
+      "title": "Добавить сетевую синхронизацию и полётный E2E",
+      "milestone": "M8",
+      "area": "mcheli",
+      "kind": "integration",
+      "priority": "P1",
+      "size": "M",
+      "depends_on": [
+        "V04",
+        "X06"
+      ],
+      "paths": [
+        "mods/",
+        "tests/"
+      ],
+      "acceptance": "На двух клиентах аппарат синхронизируется, нет расхождения траектории выше выбранного допуска.",
+      "notes": ""
+    },
+    {
+      "id": "O01",
+      "title": "Исследовать целевой билд OpenComputers и лицензию",
+      "milestone": "M9",
+      "area": "oc",
+      "kind": "research",
+      "priority": "P1",
+      "size": "S",
+      "depends_on": [
+        "A06"
+      ],
+      "paths": [
+        "docs/mods/opencomputers/"
+      ],
+      "acceptance": "Зафиксированы версия, лицензии Lua/JVM-компонентов, API событий и файловой системы.",
+      "notes": ""
+    },
+    {
+      "id": "O02",
+      "title": "Спроектировать sandbox и интерфейс команд компьютера",
+      "milestone": "M9",
+      "area": "oc",
+      "kind": "contract",
+      "priority": "P1",
+      "size": "M",
+      "depends_on": [
+        "O01",
+        "X03"
+      ],
+      "paths": [
+        "docs/mods/opencomputers/"
+      ],
+      "acceptance": "Задокументированы event loop, таймеры, sandbox permissions, лимиты CPU/памяти и fs.",
+      "notes": ""
+    },
+    {
+      "id": "O03",
+      "title": "Реализовать один виртуальный компьютер с изолированным Lua runtime",
+      "milestone": "M9",
+      "area": "oc",
+      "kind": "implementation",
+      "priority": "P1",
+      "size": "M",
+      "depends_on": [
+        "O02",
+        "X03"
+      ],
+      "paths": [
+        "mods/"
+      ],
+      "acceptance": "Программа исполняет Hello world и событие tick с установленными лимитами; безопасность sandbox покрыта тестами.",
+      "notes": ""
+    },
+    {
+      "id": "O04",
+      "title": "Добавить экран, файловую систему и периферию тестового компьютера",
+      "milestone": "M9",
+      "area": "oc",
+      "kind": "implementation",
+      "priority": "P1",
+      "size": "M",
+      "depends_on": [
+        "O03",
+        "X04",
+        "X07"
+      ],
+      "paths": [
+        "mods/"
+      ],
+      "acceptance": "Программа считывает событие, пишет в sandbox-файл, выводит строку на экран; состояние сохраняется.",
+      "notes": ""
+    },
+    {
+      "id": "O05",
+      "title": "E2E OpenComputers: сохранить/запустить программу в мире",
+      "milestone": "M9",
+      "area": "oc",
+      "kind": "integration",
+      "priority": "P1",
+      "size": "M",
+      "depends_on": [
+        "O04",
+        "X06"
+      ],
+      "paths": [
+        "mods/",
+        "tests/"
+      ],
+      "acceptance": "При повторном открытии мира пользовательская программа и её данные сохраняются, sandbox не получает доступ к файлам ОС.",
+      "notes": ""
+    }
+  ]
+}
