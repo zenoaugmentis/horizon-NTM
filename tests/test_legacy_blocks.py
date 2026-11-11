@@ -226,7 +226,38 @@ class ModernView(unittest.TestCase):
         self.assertEqual(mv(LegacyBlock(165, 0), "ntm:ore_uranium", table), "ntm:ore_uranium")
         self.assertEqual(mv(LegacyBlock(2000, 0), "horizon:unknown_2000", table), "horizon:unknown_2000")
         self.assertEqual(mv(LegacyBlock(1204, 0), "ntm:ore_uranium", table), "ntm:ore_uranium")
+class ItemKindRegression(unittest.TestCase):
+    def test_block_without_item_has_no_item_kind(self):
+        registry = LegacyRegistry()
+        block_id = registry.register_block(
+            "s02test:block_without_item",
+            hint=1000,
+            item_block=False,
+        )
 
+        self.assertNotIn("s02test:block_without_item", registry.items)
+        self.assertEqual(registry.item_kind(block_id), "free")
+
+        other_item_id = registry.register_item(
+            "s02test:other_item",
+            hint=block_id,
+        )
+        self.assertNotEqual(other_item_id, block_id)
+
+    def test_matching_block_and_item_is_item_block(self):
+        registry = LegacyRegistry()
+        block_id = registry.register_block(
+            "s02test:block_with_item",
+            hint=1000,
+        )
+
+        self.assertEqual(registry.item_kind(block_id), "item_block")
+
+    def test_standalone_item_is_item(self):
+        registry = LegacyRegistry()
+        item_id = registry.register_item("s02test:standalone_item")
+
+        self.assertEqual(registry.item_kind(item_id), "item")
 
 if __name__ == "__main__":
     unittest.main()

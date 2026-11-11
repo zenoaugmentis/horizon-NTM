@@ -216,10 +216,13 @@ class LegacyRegistry:
     def item_kind(self, item_id: int) -> str:
         if not 0 <= item_id <= MAX_ITEM_ID:
             raise ValueError(f"item id {item_id} out of 0..={MAX_ITEM_ID}")
-        owner = self._owner(item_id)
-        if owner is None:
+        item_name = next(
+            (name for name, value in self.items.items() if value == item_id),
+            None,
+        )
+        if item_name is None:
             return "free"
-        if owner[0] == "block" or owner[1] in self.blocks:
+        if self.blocks.get(item_name) == item_id:
             return "item_block"
         return "item"
 
