@@ -1,0 +1,33 @@
+S05 — selected log evidence, 2026-11-14
+Normalized excerpts from user-supplied logs, not a complete latest.log.
+Private paths, player identity and unrelated authentication traces omitted.
+
+15:03:51 Reloading ResourceManager: Default, S05-stack-A.zip, S05-stack-B.zip
+15:03:51 Created: 512x256 textures/blocks-atlas
+15:03:51 Unable to parse metadata from minecraft:textures/items/apple.png
+java.lang.RuntimeException: broken aspect ratio and not an animation
+15:05:07 Reloading ResourceManager: Default, S05-stack-B.zip, S05-stack-A.zip
+15:05:08 Created: 512x256 textures/blocks-atlas
+15:05:08 Created: 256x256 textures/items-atlas
+15:06:20 Reloading ResourceManager: Default, S05-stack-A.zip, S05-stack-C.zip
+15:06:21 Created: 512x256 textures/blocks-atlas
+15:06:21 Created: 256x256 textures/items-atlas
+15:09:35 Unable to parse metadata section of resourcepack: S05-stack-B.zip
+brb: 'pack.mcmeta' in ResourcePack '[private path omitted]'
+
+15:32:34 Reloading ResourceManager: Default, S05-bad-animation-json.zip
+15:32:36 Unable to parse metadata from minecraft:textures/items/apple.png
+com.google.gson.JsonSyntaxException: java.io.EOFException: End of input at line 1 column 2
+15:33:08 Reloading ResourceManager: Default, S05-bad-frame-index.zip
+15:33:09 Unable to parse metadata from minecraft:textures/items/apple.png
+java.lang.RuntimeException: invalid frameindex 2
+15:54:16 Reloading ResourceManager: Default, S05-zero-frametime.zip
+15:54:16 Unable to parse metadata from minecraft:textures/items/apple.png
+java.lang.IllegalArgumentException: Invalid default frame time
+15:58:28 Reloading ResourceManager: Default, S05-zero-frame-time.zip
+15:58:29 Unable to parse metadata from minecraft:textures/items/apple.png
+java.lang.IllegalArgumentException: Invalid frame time
+
+Invalid alpha128 attempt: old alpha0 pack still selected:
+16:09:51 Reloading ResourceManager: Default, S05-item-alpha.zip
+16:10:20 Reloading ResourceManager: Default, S05-item-alpha.zip
